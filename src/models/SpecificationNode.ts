@@ -1,3 +1,5 @@
+import { Tag } from "./Tag";
+
 export enum SpecificationNodeTypes {
   drawing = 'DRAWING',
   picture = 'PICTURE',
@@ -15,7 +17,9 @@ export interface ISpecificationNode {
   getDescription(): string | null;
   getContent(): string | null;
   getChildren(): ISpecificationNode[];
+  getTags(): Tag[];
   addChild(child: ISpecificationNode): void;
+  addTag(tag: Tag): void;
   setDescription(description: string): void;
   setContent(content: string): void;
   isLeaf(): boolean;
@@ -24,6 +28,7 @@ export class SpecificationNode implements ISpecificationNode {
   private description?: string;
   private content?: string | undefined;
   private children: ISpecificationNode[] = [];
+  private tags: Tag[] = [];
 
   constructor(private title: string, private type: SpecificationNodeTypes) {}
 
@@ -33,22 +38,30 @@ export class SpecificationNode implements ISpecificationNode {
   getType(): SpecificationNodeTypes {
     return this.type;
   }
+
+  getTags(): Tag[] {
+    return this.tags;
+  }
+  addTag(tag: Tag): void {
+    this.tags.push(tag);
+  }
+  
   getDescription(): string | null {
     return this.description ?? null;
   }
-  getContent(): string | null {
-    return this.content ?? null;
-  }
-  getChildren(): ISpecificationNode[] {
-    return this.children;
-  }
-
-
   setDescription(description: string) {
     this.description = description;
   }
+
+  getContent(): string | null {
+    return this.content ?? null;
+  }
   setContent(content: string) {
     this.content = content;
+  }
+
+  getChildren(): ISpecificationNode[] {
+    return this.children;
   }
   addChild(child: ISpecificationNode, index: number | null = null) {
     index = index ?? this.children.length;

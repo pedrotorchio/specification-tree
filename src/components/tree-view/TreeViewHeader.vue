@@ -11,6 +11,9 @@ export default class TreeViewHeader extends Vue {
 }
 </script>
 <style lang="sass" scoped>
+$height: 32px
 .tree-view-header
-  height: 24px
+  height: $height
+  line-height: $height
+  text-transform: uppercase
 </style>

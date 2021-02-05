@@ -11,5 +11,6 @@ export default class TreeViewLeavesGrid extends Vue {
 }
 </script>
 <style lang="sass" scoped>
-
+.tree-view-leaves-grid
+  
 </style>

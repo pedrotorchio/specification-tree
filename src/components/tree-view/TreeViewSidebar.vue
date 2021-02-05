@@ -10,3 +10,7 @@ export default class TreeViewSidebar extends Vue {
 
 }
 </script>
+<style lang="sass" scoped>
+.tree-view-sidebar
+  
+</style>

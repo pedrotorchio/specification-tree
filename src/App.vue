@@ -25,6 +25,7 @@ html, body, #app
   width: 100%
   margin: 0
   padding: 0
+  font-family: sans-serif
 .tree-view-frame
   height: 100%
   width: 100%

@@ -1,5 +1,5 @@
 <template lang="pug">
-aside.tree-view-sidebar
+aside.assets-view-sidebar
 </template>
 
 <script lang="ts">
@@ -11,6 +11,6 @@ export default class TreeViewSidebar extends Vue {
 }
 </script>
 <style lang="sass" scoped>
-.tree-view-sidebar
+.assets-view-sidebar
   
 </style>

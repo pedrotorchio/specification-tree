@@ -1,5 +1,5 @@
 <template lang="pug">
-article.tree-view-leaves-grid
+article.assets-view-leaves-grid
 </template>
 
 <script lang="ts">
@@ -11,6 +11,6 @@ export default class TreeViewLeavesGrid extends Vue {
 }
 </script>
 <style lang="sass" scoped>
-.tree-view-leaves-grid
+.assets-view-leaves-grid
   
 </style>

@@ -1,32 +1,58 @@
 <template lang="pug">
-tree-view-frame
+main
+  directory-view( v-if="directoryView" :specifications="specificationTree" )
+  assets-view-frame( v-else )
+  new-asset-button( @click:new-asset="newAsset()" )
 </template>
 <script lang="ts">
-import { Options, Vue } from 'vue-class-component';
-import TreeViewFrame from '@/components/tree-view/TreeViewFrame.vue';
+import { defineComponent, ref, watch } from 'vue';
+import AssetsViewFrame from '@/components/assets-view/AssetsViewFrame.vue';
+import DirectoryView from '@/components/directory-view/DirectoryView.vue';
+import { SpecificationTree } from './models/SpecificationTree';
+import NewAssetButton from '@/components/new-asset/NewAssetButton.vue';
+import specificationTreeComposition from '@/components/app/specificationTreeComposition';
+import { SpecificationNode, SpecificationNodeTypes } from './models/SpecificationNode';
 
-@Options({
-  props: {
-    msg: String
-  },
+export default defineComponent({
   components: {
-    TreeViewFrame
+    AssetsViewFrame,
+    DirectoryView,
+    NewAssetButton
+  },
+  setup() {
+    const directoryView = ref(true);
+    const { chooseNewParent, specificationTree, addNewAsset } = specificationTreeComposition();
+
+
+    return {
+      directoryView,
+      chooseNewParent,
+      newAsset: () => addNewAsset(new SpecificationNode("Test", SpecificationNodeTypes.text)),
+      specificationTree
+    }
   }
 })
-export default class App extends Vue {
-
-}
 </script>
 <style lang="sass">
 *
   box-sizing: border-box
+
+body
+
+  background-color: $background-pattern-colour-b
+  background-image:  linear-gradient(135deg, $background-pattern-colour-a 25%, transparent 25%), linear-gradient(225deg, $background-pattern-colour-a 25%, transparent 25%), linear-gradient(45deg, $background-pattern-colour-a 25%, transparent 25%), linear-gradient(315deg, $background-pattern-colour-a 25%, #E5E5F7 25%)
+  background-position:  $background-pattern-size 0, $background-pattern-size 0, 0 0, 0 0
+  background-size: $background-pattern-size $background-pattern-size
+  background-repeat: repeat
 html, body, #app
   height: 100%
   width: 100%
   margin: 0
   padding: 0
   font-family: sans-serif
-.tree-view-frame
+.assets-view-frame
   height: 100%
   width: 100%
+
+
 </style>

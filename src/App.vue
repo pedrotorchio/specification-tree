@@ -1,6 +1,7 @@
 <template lang="pug">
 main
-  directory-view( v-if="directoryView" :specifications="specificationTree" )
+  | {{}}
+  directory-view( v-if="directoryView" :specifications="specificationTree" @select:specificationNode="selectNode($event)" )
   assets-view-frame( v-else )
   new-asset-button( @click:new-asset="newAsset()" )
 </template>
@@ -11,7 +12,8 @@ import DirectoryView from '@/components/directory-view/DirectoryView.vue';
 import { SpecificationTree } from './models/SpecificationTree';
 import NewAssetButton from '@/components/new-asset/NewAssetButton.vue';
 import specificationTreeComposition from '@/components/app/specificationTreeComposition';
-import { SpecificationNode, SpecificationNodeTypes } from './models/SpecificationNode';
+import { ISpecificationNode, SpecificationNode } from './models/SpecificationNode';
+import NodeType, { SpecificationNodeTypes } from './models/NodeType';
 
 export default defineComponent({
   components: {
@@ -23,11 +25,11 @@ export default defineComponent({
     const directoryView = ref(true);
     const { chooseNewParent, specificationTree, addNewAsset } = specificationTreeComposition();
 
-
     return {
       directoryView,
       chooseNewParent,
-      newAsset: () => addNewAsset(new SpecificationNode("Test", SpecificationNodeTypes.text)),
+      newAsset: () => addNewAsset(new SpecificationNode("Test", new NodeType(SpecificationNodeTypes.text))),
+      selectNode: (node: ISpecificationNode) => chooseNewParent(node),
       specificationTree
     }
   }

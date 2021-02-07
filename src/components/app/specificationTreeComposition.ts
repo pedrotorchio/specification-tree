@@ -1,4 +1,4 @@
-import { ISpecificationNode, SpecificationNode, SpecificationNodeTypes } from "@/models/SpecificationNode";
+import { ISpecificationNode } from "@/models/SpecificationNode";
 import { SpecificationTree } from "@/models/SpecificationTree";
 import { Ref, ref } from "vue";
 

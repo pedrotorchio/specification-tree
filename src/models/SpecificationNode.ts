@@ -1,22 +1,17 @@
+import { JsonValue } from "type-fest";
+import Asset from "./Asset";
+import Metadata from "./Metadata";
+import NodeArray, { ListOf } from "./NodeArray";
+import NodeType from "./NodeType";
 import { Tag } from "./Tag";
-
-export enum SpecificationNodeTypes {
-  drawing = 'DRAWING',
-  picture = 'PICTURE',
-  text = 'TEXT',
-  html = 'HTML',
-  file = 'FILE',
-  link = 'LINK',
-  integration = 'INTEGRATION',
-  list = 'LIST',
-  specifications = 'SPECIFICATIONS'
-}
+import Uuid from "./Uuid";
 export interface ISpecificationNode {
+  getUuid(): string;
   getTitle(): string;
-  getType(): SpecificationNodeTypes;
+  getType(): NodeType;
   getDescription(): string | null;
   getContent(): string | null;
-  getChildren(): ISpecificationNode[];
+  getChildren(): ListOf<ISpecificationNode>;
   getTags(): Tag[];
   addChild(child: ISpecificationNode): void;
   addTag(tag: Tag): void;
@@ -25,50 +20,54 @@ export interface ISpecificationNode {
   isLeaf(): boolean;
 }
 export class SpecificationNode implements ISpecificationNode {
-  private description?: string;
-  private content?: string | undefined;
-  private children: ISpecificationNode[] = [];
-  private tags: Tag[] = [];
+  
+  private _asset: Asset;
+  private _children: NodeArray;
+  private _metadata: Metadata<string>;
 
-  constructor(private title: string, private type: SpecificationNodeTypes) {}
-
-  getTitle(): string {
-    return this.title;
+  constructor(title: string, private _type: NodeType) {
+    this._children = new NodeArray();
+    this._metadata = new Metadata(title, new Uuid());
+    this._asset = new Asset();
   }
-  getType(): SpecificationNodeTypes {
-    return this.type;
+  getUuid() {
+    return this._metadata.uuid.value;
+  }
+  getTitle(): string {
+    return this._metadata.title;
+  }
+  getType(): NodeType {
+    return this._type;
   }
 
   getTags(): Tag[] {
-    return this.tags;
+    return this._metadata.tags;
   }
   addTag(tag: Tag): void {
-    this.tags.push(tag);
+    this._metadata.tags.push(tag);
   }
   
   getDescription(): string | null {
-    return this.description ?? null;
+    return this._metadata.description ?? null;
   }
   setDescription(description: string) {
-    this.description = description;
+    this._metadata.description = description;
   }
 
   getContent(): string | null {
-    return this.content ?? null;
+    return this._asset.getContent();
   }
-  setContent(content: string) {
-    this.content = content;
+  setContent(content: JsonValue) {
+    this._asset.setContent(content);
   }
 
-  getChildren(): ISpecificationNode[] {
-    return this.children;
+  getChildren(): NodeArray {
+    return this._children;
   }
   addChild(child: ISpecificationNode, index: number | null = null) {
-    index = index ?? this.children.length;
-    this.children.splice(index, 0, child);
+    this._children.add(child, index);
   }
-
-  isLeaf(): boolean {
-    return this.type !== SpecificationNodeTypes.specifications;
+  isLeaf() {
+    return this._type.isLeafType();
   }
 }

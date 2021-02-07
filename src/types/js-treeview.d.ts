@@ -1,8 +1,9 @@
 declare module 'js-treeview' {
-  export = class JsTree {
-    constructor(tree: JsTreeNode[], id: string | Element);
-    on(eventName: JsTreeEventName, callback: JsTreeEventCallback);
-  }
+  export = JsTree
+}
+declare class JsTree {
+  constructor(tree: JsTreeNode[], id: string | Element);
+  on(eventName: JsTreeEventName, callback: JsTreeEventCallback);
 }
 declare type JsTreeNode = { name: string, children: JsTreeNode[], expanded?: boolean };
 declare type JsTreeEventName = 'expand' | 'expandAll' | 'collapse' | 'collapseAll' | 'select';

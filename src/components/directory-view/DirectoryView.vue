@@ -1,15 +1,17 @@
 <template lang="pug">
 #directory-view
-  
+  tree-node-view( v-for="child in specifications.getChildren()" :node="child" @select="clickedNode($event)" )
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, PropType, ref, watch } from 'vue';
+import { ISpecificationNode } from '@/models/SpecificationNode';
 import { SpecificationTree } from '@/models/SpecificationTree';
-import JsTree from "js-treeview";
-import 'js-treeview/src/treeview.css'
-import { specificationTreeToJsTreeNodes } from './jsTreeComposition';
+import { defineComponent, PropType } from 'vue';
+import { useJsTreeComposition } from './jsTreeComposition';
+import TreeNodeView from './TreeNodeView.vue';
+
 export default defineComponent({
+  components: { TreeNodeView },
   props: {
     specifications: {
       required: true,
@@ -18,22 +20,14 @@ export default defineComponent({
   },
   emits: [ "select:specificationNode" ],
   setup(props, { emit }) {
-    let root: Element;
-    let jsTreeNodes: JsTreeNode[] = specificationTreeToJsTreeNodes(props.specifications);
-    const initialiseJsTree = () => {
-      jsTree.value = new JsTree(jsTreeNodes, root);
-      jsTree.value.on("select", (e) => emit("select:specificationNode")); // emit selected specificationNode
+    const { selectNode } = useJsTreeComposition();
+    return {  
+      clickedNode: (node: ISpecificationNode) => {
+        console.log(node);
+        selectNode(node);
+        emit("select:specificationNode", node);
+      }
     }
-
-    const jsTree = ref<JsTree | null>(null);
-    watch(() => props.specifications, () => {
-      jsTreeNodes = specificationTreeToJsTreeNodes(props.specifications);
-      initialiseJsTree();
-    }, { deep: true });
-    onMounted(() => {
-      root = document.querySelector("#directory-view")!;
-      initialiseJsTree();
-    })
   },
 });
 </script>

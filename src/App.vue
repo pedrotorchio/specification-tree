@@ -1,6 +1,5 @@
 <template lang="pug">
 main
-  | {{}}
   directory-view( v-if="directoryView" :specifications="specificationTree" @select:specificationNode="selectNode($event)" )
   assets-view-frame( v-else )
   new-asset-button( @click:new-asset="newAsset()" )
@@ -46,15 +45,30 @@ body
   background-position:  $background-pattern-size 0, $background-pattern-size 0, 0 0, 0 0
   background-size: $background-pattern-size $background-pattern-size
   background-repeat: repeat
-html, body, #app
+html, body, #app, #app > main
   height: 100%
   width: 100%
   margin: 0
   padding: 0
   font-family: sans-serif
-.assets-view-frame
+#app > main
+  display: flex
+  flex-direction: column
+.assets-view-frame, #directory-view
   height: 100%
   width: 100%
+  flex: 1 1 auto
+.new-asset-button
+  flex: 0 0 auto
+  height: 36px
+  border-radius: 0
+  border: none
+  background: $base-color
+  color: white
+  text-transform: uppercase
+  font-weight: bold
+  letter-spacing: 5px
+
 
 
 </style>

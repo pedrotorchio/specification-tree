@@ -14,16 +14,20 @@ export interface ISpecificationNode {
   getChildren(): ListOf<ISpecificationNode>;
   getTags(): Tag[];
   addChild(child: ISpecificationNode): void;
-  addTag(tag: Tag): void;
+  addTag(...tags: Tag[]): void;
   setDescription(description: string): void;
   setContent(content: string): void;
   isLeaf(): boolean;
+  getParentNode(): ISpecificationNode | null;
+  setParentNode(node: ISpecificationNode): void;
+  equals(object: any): boolean;
 }
 export class SpecificationNode implements ISpecificationNode {
   
   private _asset: Asset;
   private _children: NodeArray;
   private _metadata: Metadata<string>;
+  private _parentNode: ISpecificationNode | null = null;
 
   constructor(title: string, private _type: NodeType) {
     this._children = new NodeArray();
@@ -32,6 +36,12 @@ export class SpecificationNode implements ISpecificationNode {
   }
   getUuid() {
     return this._metadata.uuid.value;
+  }
+  getParentNode(): ISpecificationNode | null {
+    return this._parentNode;
+  }
+  setParentNode(node: ISpecificationNode) {
+    this._parentNode = node;
   }
   getTitle(): string {
     return this._metadata.title;
@@ -43,8 +53,8 @@ export class SpecificationNode implements ISpecificationNode {
   getTags(): Tag[] {
     return this._metadata.tags;
   }
-  addTag(tag: Tag): void {
-    this._metadata.tags.push(tag);
+  addTag(...tags: Tag[]): void {
+    this._metadata.tags.push(...tags);
   }
   
   getDescription(): string | null {
@@ -65,7 +75,11 @@ export class SpecificationNode implements ISpecificationNode {
     return this._children;
   }
   addChild(child: ISpecificationNode, index: number | null = null) {
+    child.setParentNode(this);
     this._children.add(child, index);
+  }
+  equals(value: any): boolean {
+    return ((value as ISpecificationNode)?.getUuid() === this.getUuid());
   }
   isLeaf() {
     return this._type.isLeafType();

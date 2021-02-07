@@ -1,6 +1,6 @@
 <template lang="pug">
 #directory-view
-  tree-node-view( v-for="child in specifications.getChildren()" :node="child" @select="clickedNode($event)" )
+  tree-node-view( v-for="child, i in specifications.getChildren()" :node="child" @select="clickedNode($event)" :index="i" )
 </template>
 
 <script lang="ts">

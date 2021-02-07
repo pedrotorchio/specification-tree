@@ -1,7 +1,7 @@
 import Metadata from "./Metadata";
 import NodeArray, { ListOf } from "./NodeArray";
 import NodeType, { SpecificationNodeTypes } from "./NodeType";
-import { ISpecificationNode } from "./SpecificationNode";
+import { ISpecificationNode, SpecificationNode } from "./SpecificationNode";
 import { Tag } from "./Tag";
 import Uuid from "./Uuid";
 
@@ -14,6 +14,23 @@ export class SpecificationTree implements ISpecificationNode {
     this._nodes = new NodeArray();
     this._metadata = new Metadata(title, new Uuid());
     this._nodeType = new NodeType(SpecificationNodeTypes.specifications);
+  }
+  getParentNode(): ISpecificationNode | null {
+    return null;
+  }
+  setParentNode(parentNode: ISpecificationNode): void {
+    const description = this.getDescription();
+    const title = this.getTitle();
+    const type = this.getType();
+    const tags = this.getTags();
+    const content = this.getContent();
+
+    const specNode = new SpecificationNode(title, type);
+    specNode.addTag(...tags)
+    specNode.setContent(content);
+    if (description) specNode.setDescription(description);
+
+    parentNode.addChild(specNode);
   }
   getUuid() {
     return this._metadata.uuid.value;
@@ -41,6 +58,9 @@ export class SpecificationTree implements ISpecificationNode {
   }
   isLeaf(): boolean {
     return false;
+  }
+  equals(value: any): boolean {
+    return ((value as ISpecificationNode)?.getUuid() === this.getUuid());
   }
 
   getTitle(): string {

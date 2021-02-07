@@ -3,6 +3,9 @@ import { ISpecificationNode } from "./SpecificationNode";
 export default class NodeArray implements ListOf<ISpecificationNode> {
   private _nodes: ISpecificationNode[] = [];
   
+  some(fn: SomeCallback<ISpecificationNode>): boolean {
+    return this._nodes.some(fn);
+  }
   mapToArray<Transformed>(fn: MapToArrayCallback<ISpecificationNode, Transformed>): Transformed[] {
     return this._nodes.map(fn);
   }
@@ -27,5 +30,7 @@ export interface ListOf<Type> extends Iterable<Type> {
   add(element: Type, index?: number): void;
   get(index: number): Type;
   mapToArray<Transformed>(fn: MapToArrayCallback<Type, Transformed>): Transformed[];
+  some(fn: SomeCallback<Type>): boolean;
 }
+type SomeCallback<Type> = (value: Type) => boolean;
 type MapToArrayCallback<Type, Transformed> = (value: Type, index: number, array: ISpecificationNode[]) => Transformed;

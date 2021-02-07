@@ -1,5 +1,5 @@
 <template lang="pug">
-button( @click="$emit('click:new-asset')" ) New Asset
+button.new-asset-button( @click="$emit('click:new-asset')" ) New Asset
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'

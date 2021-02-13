@@ -7,7 +7,7 @@
 import { ISpecificationNode } from '@/models/SpecificationNode';
 import { SpecificationTree } from '@/models/SpecificationTree';
 import { defineComponent, PropType } from 'vue';
-import { useJsTreeComposition } from './jsTreeComposition';
+import { selectNode } from './jsTreeComposition';
 import TreeNodeView from './TreeNodeView.vue';
 
 export default defineComponent({
@@ -20,10 +20,9 @@ export default defineComponent({
   },
   emits: [ "select:specificationNode" ],
   setup(props, { emit }) {
-    const { selectNode } = useJsTreeComposition();
+
     return {  
       clickedNode: (node: ISpecificationNode) => {
-        console.log(node);
         selectNode(node);
         emit("select:specificationNode", node);
       }

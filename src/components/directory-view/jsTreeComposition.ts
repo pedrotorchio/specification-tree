@@ -1,6 +1,6 @@
 import { ISpecificationNode, SpecificationNode } from "@/models/SpecificationNode";
 import { SpecificationTree } from "@/models/SpecificationTree";
-import { Ref, ref } from "vue";
+import { computed, Ref, ref, SetupContext, toRefs } from "vue";
 
 // export function specificationTreeToJsTreeNodes(specificationTree: SpecificationTree): JsTreeNode[] {
 //   const jsTreeNodes: JsTreeNode[] = specificationTree.getChildren().mapToArray(specificationTreeNodeToJsTreeNode);
@@ -25,11 +25,36 @@ import { Ref, ref } from "vue";
 //     nodes: specificationTreeNode.getChildren().mapToArray(specificationTreeNodeToVueJsTreeNode)
 //   }
 // }
-
+type RequiredProps = {
+  level: number,
+  index: number,
+  node: ISpecificationNode
+}
 const selectedNode: Ref<ISpecificationNode | null> = ref(null);
-export function useJsTreeComposition() {
+export function selectNode(node: ISpecificationNode | null) {
+  selectedNode.value = node;
+}
+export function useTreeNode(props: RequiredProps, { emit }: SetupContext) {
+  const {
+    level,
+    node,
+    index
+  } = toRefs(props);
+  const isThisNodeRoot = computed(() => level.value === 0);
+  const isThisNodeSelected = computed(() => selectedNode.value?.equals(node.value));
+  const title = computed(() => `${level.value}-${index.value}_${node.value.getTitle()}`);
+
+  const applyToNode = <T>(aFunction: (n: ISpecificationNode) => T): T => aFunction(node.value!);
+  const selectNodeAndEmit = (node: ISpecificationNode) => {
+    selectedNode.value = node
+    emit("select", node);
+  }
   return {
+    isThisNodeRoot,
+    isThisNodeSelected,
+    apply: applyToNode,
+    title,
     selectedNode,
-    selectNode: (node: ISpecificationNode) => selectedNode.value = node
+    selectNodeAndEmit
   }
 }

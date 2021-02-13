@@ -1,15 +1,14 @@
 <template lang="pug">
 .tree-node-view
-  h2( :class="[`lvl-${level}`, { 'is-active': isActive, 'is-selected': isSelected }]" @click.self="emit('select', node)" ) {{title}}
-    
-  tree-node-view( v-for="child, i in node.getChildren()" :node="child" @select="emit('select', $event)" :level="level + 1" :index="i")
+  h2( :class="[`lvl-${level}`, { 'is-active': isExpanded, 'is-selected': isSelected }]" @click.self="selectNode(node)" ) {{title}}
+  tree-node-view( v-for="child, i in node.getChildren()" :node="child" @select="selectNode($event)" :level="level + 1" :index="i")
 </template>
 
 <script lang="ts">
 import { SpecificationNode } from '@/models/SpecificationNode';
-import { computed, defineComponent, PropType, reactive } from 'vue';
-import specificationTreeComposition from '../app/specificationTreeComposition';
-import { useJsTreeComposition } from './jsTreeComposition';
+import { computed, defineComponent, PropType } from 'vue';
+import useSpecificationTreeComposition from '../app/specificationTreeComposition';
+import { useTreeNode } from './jsTreeComposition';
 
 export default defineComponent({
   name: "TreeNodeView",
@@ -27,28 +26,33 @@ export default defineComponent({
       required: true
     }
   },
-  setup(props, { emit }) {
-    const { selectedNode } = useJsTreeComposition();
-    const { isAncestor, isDirectChild, isSibling, isAncestorOrUncle } = specificationTreeComposition();
+  setup(props, context) {
+    const { 
+      isThisNodeSelected,
+      isThisNodeRoot,
+      apply,
+      title,
+      selectNodeAndEmit 
+    } = useTreeNode(props, context);
+    const {
+      isDirectChild,
+      isSibling,
+      isAncestorOrUncle
+    } = useSpecificationTreeComposition();
 
-    const isThisNodeSelected = computed(() => selectedNode.value?.equals(props.node));
-    const isThisNodeDirectChild = computed(() => isDirectChild(props.node));
-    const isThisNodeSibling = computed(() => isSibling(props.node));
-    const isThisNodeAncestorOrUncle = computed(() => isAncestorOrUncle(props.node));
-    const isThisNodeRoot = computed(() => props.level === 0);
-    const isThisNodeActive = computed(() => isThisNodeRoot.value || isThisNodeSelected.value || isThisNodeAncestorOrUncle.value || isThisNodeDirectChild.value || isThisNodeSibling.value);
-
-    const title = computed(() => `${props.level}-${props.index}_${props.node.getTitle()}`)
+    const isExpanded = computed(() => {
+      return isThisNodeSelected.value 
+        || isThisNodeRoot.value 
+        || apply(isDirectChild)
+        || apply(isSibling)
+        || apply(isAncestorOrUncle)
+    });
 
     return {
-      isThisNodeSelected,
-      isThisNodeAncestorOrUncle,
-      isThisNodeDirectChild,
-      isThisNodeSibling,
-      isActive: isThisNodeActive,
+      isExpanded,
       isSelected: isThisNodeSelected,
       title,
-      emit
+      selectNode: selectNodeAndEmit
     }
   }
 });

@@ -1,3 +1,4 @@
+import Asset from "./Asset";
 import Metadata from "./Metadata";
 import NodeArray, { ListOf } from "./NodeArray";
 import NodeType, { SpecificationNodeTypes } from "./NodeType";
@@ -21,11 +22,14 @@ export class SpecificationTree implements ISpecificationNode {
   setParentNode(parentNode: ISpecificationNode): void {
     const description = this.getDescription();
     const title = this.getTitle();
-    const type = this.getType();
     const tags = this.getTags();
     const content = this.getContent();
 
-    const specNode = new SpecificationNode(title, type);
+    const asset = new Asset();
+    asset.setContent(content);
+    asset.setType(this.getType());
+
+    const specNode = new SpecificationNode(title, asset);
     specNode.addTag(...tags)
     specNode.setContent(content);
     if (description) specNode.setDescription(description);

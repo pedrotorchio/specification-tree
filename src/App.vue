@@ -13,6 +13,7 @@ import NewAssetButton from '@/components/new-asset/NewAssetButton.vue';
 import specificationTreeComposition from '@/components/app/specificationTreeComposition';
 import { ISpecificationNode, SpecificationNode } from './models/SpecificationNode';
 import NodeType, { SpecificationNodeTypes } from './models/NodeType';
+import Asset from './models/Asset';
 
 export default defineComponent({
   components: {
@@ -23,11 +24,17 @@ export default defineComponent({
   setup() {
     const directoryView = ref(true);
     const { chooseNewParent, specificationTree, addNewAsset } = specificationTreeComposition();
+    const mkRandomAsset = () => {
+      const newAsset = new Asset();
+      newAsset.setType(new NodeType(SpecificationNodeTypes.text));
+      newAsset.setContent(`Random: ${Math.floor(Math.random()*999)}`);
+      return newAsset;
+    }
 
     return {
       directoryView,
       chooseNewParent,
-      newAsset: () => addNewAsset(new SpecificationNode("Test", new NodeType(SpecificationNodeTypes.text))),
+      newAsset: () => addNewAsset(new SpecificationNode("A test", mkRandomAsset())),
       selectNode: (node: ISpecificationNode) => chooseNewParent(node),
       specificationTree
     }

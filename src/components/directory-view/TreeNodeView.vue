@@ -1,6 +1,7 @@
 <template lang="pug">
 .tree-node-view
   h2( :class="[`lvl-${level}`, { 'is-active': isExpanded, 'is-selected': isSelected }]" @click.self="selectNode(node)" ) {{title}}
+  p( v-show="isSelected" ) {{ content }}
   tree-node-view( v-for="child, i in node.getChildren()" :node="child" @select="selectNode($event)" :level="level + 1" :index="i")
 </template>
 
@@ -31,6 +32,7 @@ export default defineComponent({
       isThisNodeSelected,
       isThisNodeRoot,
       apply,
+      content,
       title,
       selectNodeAndEmit 
     } = useTreeNode(props, context);
@@ -52,6 +54,7 @@ export default defineComponent({
       isExpanded,
       isSelected: isThisNodeSelected,
       title,
+      content,
       selectNode: selectNodeAndEmit
     }
   }
@@ -63,10 +66,15 @@ h2
   cursor: pointer
   display: none
   font-size: 16px
+  margin: 5px 0
 .is-selected
   font-weight: bold
 .is-active
   display: block
 .tree-node-view
   padding-left: 16px
+p
+  font-size: 12px
+  margin: 0
+  padding-left: 12px
 </style>

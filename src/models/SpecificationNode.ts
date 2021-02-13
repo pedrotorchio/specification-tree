@@ -23,16 +23,14 @@ export interface ISpecificationNode {
   equals(object: any): boolean;
 }
 export class SpecificationNode implements ISpecificationNode {
-  
-  private _asset: Asset;
+
   private _children: NodeArray;
   private _metadata: Metadata<string>;
   private _parentNode: ISpecificationNode | null = null;
 
-  constructor(title: string, private _type: NodeType) {
+  constructor(title: string, private _asset: Asset) {
     this._children = new NodeArray();
     this._metadata = new Metadata(title, new Uuid());
-    this._asset = new Asset();
   }
   getUuid() {
     return this._metadata.uuid.value;
@@ -47,7 +45,7 @@ export class SpecificationNode implements ISpecificationNode {
     return this._metadata.title;
   }
   getType(): NodeType {
-    return this._type;
+    return this._asset.getType();
   }
 
   getTags(): Tag[] {
@@ -82,6 +80,6 @@ export class SpecificationNode implements ISpecificationNode {
     return ((value as ISpecificationNode)?.getUuid() === this.getUuid());
   }
   isLeaf() {
-    return this._type.isLeafType();
+    return this._asset.getType().isLeafType();
   }
 }

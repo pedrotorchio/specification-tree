@@ -3,23 +3,28 @@ main
   directory-view( v-if="directoryView" :specifications="specificationTree" @select:specificationNode="selectNode($event)" )
   assets-view-frame( v-else )
   new-asset-button( @click:new-asset="newAsset()" )
+  modal-container
 </template>
 <script lang="ts">
-import { defineComponent, ref, watch } from 'vue';
+import specificationTreeComposition from '@/components/app/specificationTreeComposition';
 import AssetsViewFrame from '@/components/assets-view/AssetsViewFrame.vue';
 import DirectoryView from '@/components/directory-view/DirectoryView.vue';
-import { SpecificationTree } from './models/SpecificationTree';
 import NewAssetButton from '@/components/new-asset/NewAssetButton.vue';
-import specificationTreeComposition from '@/components/app/specificationTreeComposition';
-import { ISpecificationNode, SpecificationNode } from './models/SpecificationNode';
-import NodeType, { SpecificationNodeTypes } from './models/NodeType';
+import ModalContainer from '@/components/modal-container/ModalContainer.vue';
+import NewAssetModalContainer from '@/components/new-asset-modal-view/NewAssetModalView.vue';
+
+import { defineComponent, ref } from 'vue';
 import Asset from './models/Asset';
+import NodeType, { SpecificationNodeTypes } from './models/NodeType';
+import { ISpecificationNode, SpecificationNode } from './models/SpecificationNode';
+import { setModalComponent, showModal } from '@/components/modal-container/modalComposition';
 
 export default defineComponent({
   components: {
     AssetsViewFrame,
     DirectoryView,
-    NewAssetButton
+    NewAssetButton,
+    ModalContainer,
   },
   setup() {
     const directoryView = ref(true);
@@ -30,17 +35,18 @@ export default defineComponent({
       newAsset.setContent(`Random: ${Math.floor(Math.random()*999)}`);
       return newAsset;
     }
-
+    // addNewAsset(new SpecificationNode("A test", mkRandomAsset())),
     return {
       directoryView,
       chooseNewParent,
-      newAsset: () => addNewAsset(new SpecificationNode("A test", mkRandomAsset())),
+      newAsset: () => { setModalComponent(NewAssetModalContainer); showModal(); },
       selectNode: (node: ISpecificationNode) => chooseNewParent(node),
-      specificationTree
+      specificationTree,
     }
   }
 })
 </script>
+<style lang="sass" src="@/styles/forms.sass"></style>
 <style lang="sass">
 *
   box-sizing: border-box

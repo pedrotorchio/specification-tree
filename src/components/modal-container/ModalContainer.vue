@@ -5,7 +5,7 @@
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
-import { useModal } from './modalComposition';
+import { useModal } from '@/composables/globalModalView';
 
 export default defineComponent({
   setup(props, { emit }) {

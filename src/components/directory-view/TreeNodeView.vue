@@ -6,10 +6,10 @@
 </template>
 
 <script lang="ts">
+import { useTreeNode } from '@/composables/directoryTree';
+import useSpecificationTreeComposition from '@/composables/specificationTree';
 import { SpecificationNode } from '@/models/SpecificationNode';
 import { computed, defineComponent, PropType } from 'vue';
-import useSpecificationTreeComposition from '../app/specificationTreeComposition';
-import { useTreeNode } from './jsTreeComposition';
 
 export default defineComponent({
   name: "TreeNodeView",

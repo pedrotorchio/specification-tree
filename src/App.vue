@@ -6,18 +6,18 @@ main
   modal-container
 </template>
 <script lang="ts">
-import specificationTreeComposition from '@/components/app/specificationTreeComposition';
 import AssetsViewFrame from '@/components/assets-view/AssetsViewFrame.vue';
 import DirectoryView from '@/components/directory-view/DirectoryView.vue';
-import NewAssetButton from '@/components/new-asset/NewAssetButton.vue';
 import ModalContainer from '@/components/modal-container/ModalContainer.vue';
 import NewAssetModalContainer from '@/components/new-asset-modal-view/NewAssetModalView.vue';
-
+import NewAssetButton from '@/components/new-asset/NewAssetButton.vue';
+import { setModalComponent, showModal } from '@/composables/globalModalView';
+import specificationTreeComposition from '@/composables/specificationTree';
 import { defineComponent, ref } from 'vue';
 import Asset from './models/Asset';
 import NodeType, { SpecificationNodeTypes } from './models/NodeType';
-import { ISpecificationNode, SpecificationNode } from './models/SpecificationNode';
-import { setModalComponent, showModal } from '@/components/modal-container/modalComposition';
+import { ISpecificationNode } from './models/SpecificationNode';
+
 
 export default defineComponent({
   components: {

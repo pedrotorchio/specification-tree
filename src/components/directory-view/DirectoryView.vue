@@ -6,8 +6,8 @@
 <script lang="ts">
 import { ISpecificationNode } from '@/models/SpecificationNode';
 import { SpecificationTree } from '@/models/SpecificationTree';
+import { selectNode } from '@/composables/directoryTree';
 import { defineComponent, PropType } from 'vue';
-import { selectNode } from './jsTreeComposition';
 import TreeNodeView from './TreeNodeView.vue';
 
 export default defineComponent({

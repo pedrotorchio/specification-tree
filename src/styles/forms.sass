@@ -1,7 +1,37 @@
+@import '@/styles/config.sass';
+
 form
   display: block
-input, textarea
+input, textarea, button
+  $height: 36px
+  height: $height
+  line-height: $height
   display: inline-block
   outline: none
-  border: 1px solid black
-  height: 36px
+  border: 1px solid $light-font-color
+  width: 100%
+  font-size: 1rem
+  padding: 0 1rem
+input, textarea, button, .input
+  margin: 1rem 0
+  & + input, 
+  & + textarea, 
+  &:not(:first-child)
+    margin-top: 0
+  &:last-child
+    margin-bottom: 0
+label
+  color: $light-font-color
+  font-weight: lighter
+  font-size: .8rem
+  margin-bottom: .2rem
+textarea
+  resize: none
+button
+  border-radius: 0
+  border: none
+  background: $base-color
+  color: white
+  text-transform: uppercase
+  font-weight: bold
+  letter-spacing: 5px

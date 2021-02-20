@@ -73,14 +73,6 @@ html, body, #app, #app > main
   flex: 1 1 auto
 .new-asset-button
   flex: 0 0 auto
-  height: 36px
-  border-radius: 0
-  border: none
-  background: $base-color
-  color: white
-  text-transform: uppercase
-  font-weight: bold
-  letter-spacing: 5px
 
 
 

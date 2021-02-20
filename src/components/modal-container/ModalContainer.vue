@@ -1,7 +1,8 @@
 <template lang="pug">
 .modal-container-background( v-if="isShown" @click.self="close()" )
-  .modal-close-button( @click="close()" ) X
-  .modal-container: component.modal-view-component( :is="getModalComponent()" )
+  .modal-container 
+    .modal-close-button( @click="close()" ) X
+    component.modal-view-component( :is="getModalComponent()" )
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
@@ -35,15 +36,20 @@ export default defineComponent({
   align-items: center
   justify-content: center
 .modal-close-button
+  $size: 36px
   position: absolute
   display: block
-  padding: 2em
-  top: 0
-  right: 0
+  width: $size
+  height: $size
+  line-height: $size
+  text-align: center
+  top: -1*$size
+  right: -1*$size
   color: black
   cursor: pointer
 .modal-container
   min-height: 300px
+  position: relative
 .modal-view-component
   height: 100%
   width: 100%

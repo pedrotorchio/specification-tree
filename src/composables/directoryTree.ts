@@ -42,10 +42,8 @@ export function useTreeNode(props: RequiredProps, { emit }: SetupContext) {
   } = toRefs(props);
   const isThisNodeRoot = computed(() => level.value === 0);
   const isThisNodeSelected = computed(() => selectedNode.value?.equals(node.value));
-  const title = computed(() => node.value.getTitle());
-  const content = computed(() => {
-    return node.value.getContent()
-  });
+  const title = computed(() => node.value.getMetadata().title);
+  const content = computed(() => node.value.getAsset()?.getContent());
 
   const applyToNode = <T>(aFunction: (n: ISpecificationNode) => T): T => aFunction(node.value!);
   const selectNodeAndEmit = (node: ISpecificationNode) => {

@@ -2,7 +2,7 @@
 
 form
   display: block
-input, textarea, button
+input, textarea, button, select
   $height: 36px
   height: $height
   line-height: $height
@@ -12,7 +12,7 @@ input, textarea, button
   width: 100%
   font-size: 1rem
   padding: 0 1rem
-input, textarea, button, .input
+input, textarea, button, .input, select
   margin: 1rem 0
   & + input, 
   & + textarea, 
@@ -27,6 +27,8 @@ label
   margin-bottom: .2rem
 textarea
   resize: none
+  &.large
+    height: 400px !important
 button
   border-radius: 0
   border: none

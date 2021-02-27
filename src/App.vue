@@ -30,7 +30,7 @@ export default defineComponent({
     const directoryView = ref(true);
     const { chooseNewParent, specificationTree, addNewAsset } = specificationTreeComposition();
     const mkRandomAsset = () => {
-      const newAsset = new Asset();
+      const newAsset = new Asset(new NodeType(NodeType.TEXT));
       newAsset.setType(new NodeType(SpecificationNodeTypes.text));
       newAsset.setContent(`Random: ${Math.floor(Math.random()*999)}`);
       return newAsset;

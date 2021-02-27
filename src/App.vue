@@ -35,11 +35,15 @@ export default defineComponent({
       newAsset.setContent(`Random: ${Math.floor(Math.random()*999)}`);
       return newAsset;
     }
+    const showNewAssetModal = () => {
+      setModalComponent(NewAssetModalContainer); 
+      showModal();
+    }
     // addNewAsset(new SpecificationNode("A test", mkRandomAsset())),
     return {
       directoryView,
       chooseNewParent,
-      newAsset: () => { setModalComponent(NewAssetModalContainer); showModal(); },
+      newAsset: showNewAssetModal,
       selectNode: (node: ISpecificationNode) => chooseNewParent(node),
       specificationTree,
     }

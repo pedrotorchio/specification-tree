@@ -2,7 +2,7 @@
 .modal-container-background( v-if="isShown" @click.self="close()" )
   .modal-container 
     .modal-close-button( @click="close()" ) X
-    component.modal-view-component( :is="getModalComponent()" )
+    component.modal-view-component( :is="getModalComponent()" v-bind="getModalParameters()" )
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
@@ -13,13 +13,15 @@ export default defineComponent({
     const {
       getModalComponent,
       isShown,
+      getModalParameters,
       close
       } = useModal();
 
     return {
       close,
       isShown,
-      getModalComponent
+      getModalComponent,
+      getModalParameters
     }
   }
 });

@@ -1,75 +1,33 @@
 <template lang="pug">
-form
+form( @submit.prevent="" )
   label Title
-  input( v-model="assetsData.title" )
+  input( v-model="assetData.title" )
   label Type
-  select( v-model="assetsData.type" )
+  select( v-model="assetData.type" )
     option( v-for="aType in SpecificationNodeTypes" ) {{ aType }}
   label Description
-  input( v-model="assetsData.description" )
+  input( v-model="assetData.description" )
   label Content
-  textarea.large( v-model="assetsData.content" )
+  textarea.large( v-model="assetData.content" )
   button Save
 </template>
 <script lang="ts">
-import { defineComponent, reactive, ref, watch } from 'vue'
 import TextInput from '@/components/inputs/TextInput.vue';
-import Asset from '@/models/Asset';
-import { SpecificationNode } from '@/models/SpecificationNode';
-import Metadata from '@/models/Metadata';
-import Uuid from '@/models/Uuid';
-import NodeType, { SpecificationNodeTypes } from '@/models/NodeType';
+import { newAssetForm } from '@/composables/assets';
+import { SpecificationNodeTypes } from '@/models/NodeType';
+import { defineComponent } from 'vue';
 
 export default defineComponent({
   components: {
     TextInput
   },
   setup(props, { emit }) {
-    
-    type Setter = (v: any) => void;
-    const extractValue = (e: InputEvent) => (e.target as HTMLInputElement).value;
-    const call = (func: Function, ...args: any[]) => func.bind(asset)(...args);
-    const setValue = (setter: Setter) => (e: InputEvent) => call(setter, extractValue(e));
-
-    const isEmpty = () => Boolean(asset.value);
-    const asset = ref<Asset>(new Asset(new NodeType(NodeType.TEXT)));
-    const metadata = ref<Metadata<string>>(new Metadata("", new Uuid()));
-
-    const assetsData = reactive({
-      get title() {
-        return metadata.value.title;
-      },
-      set title(t: string) {
-        metadata.value.title = t;
-      },
-      get description(): string {
-        return metadata.value.description ?? "";
-      },
-      set description(d: string) {
-        metadata.value.description = d;
-      },
-      get type(): SpecificationNodeTypes {
-        return asset.value.getType().name;
-      },
-      set type(t: SpecificationNodeTypes) {
-        const type = new NodeType(t);
-        asset.value = new Asset(type)
-      },
-      get content(): string {
-        return `
-          ${JSON.stringify(metadata.value)}
-          ${JSON.stringify(asset.value)}
-        `;
-        // asset.value?.getContent() ?? "";
-      },
-      set content(c: string) {
-        // asset.value?.setContent(c);
-      }
-    })
+    const { assetDataProxy, asset } = newAssetForm();
+    const submit = () => emit("create:asset", asset);
     return {
-      assetsData,
-      setValue,
-      SpecificationNodeTypes
+      assetData: assetDataProxy,
+      SpecificationNodeTypes,
+      submit
     }
   }
 });

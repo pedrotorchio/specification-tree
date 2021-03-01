@@ -15,8 +15,9 @@ import { useModal } from '@/composables/globalModalView';
 import specificationTreeComposition from '@/composables/specificationTree';
 import { defineComponent, ref } from 'vue';
 import Asset from './models/Asset';
+import Metadata from './models/Metadata';
 import NodeType, { SpecificationNodeTypes } from './models/NodeType';
-import { ISpecificationNode } from './models/SpecificationNode';
+import { ISpecificationNode, SpecificationNode } from './models/SpecificationNode';
 
 
 export default defineComponent({
@@ -28,17 +29,24 @@ export default defineComponent({
   },
   setup() {
     const directoryView = ref(true);
-    const { chooseNewParent, specificationTree, addNewAsset } = specificationTreeComposition();
+    const { chooseNewParent, specificationTree, addNewNode } = specificationTreeComposition();
     const mkRandomAsset = () => {
       const newAsset = new Asset(new NodeType(NodeType.TEXT));
       newAsset.setType(new NodeType(SpecificationNodeTypes.text));
       newAsset.setContent(`Random: ${Math.floor(Math.random()*999)}`);
       return newAsset;
     }
-    const { setModalComponent, showModal } = useModal();
+    const { setModalComponent, showModal, hideModal } = useModal();
     const showNewAssetModal = () => {
+      type AssetMeta = { asset: Asset, metadata: Metadata<string> };
       setModalComponent(NewAssetModalContainer, {
-        listeners: { "create:asset": (e: any) => alert(e) }
+        listeners: { "create:asset": ({ asset, metadata }: AssetMeta) => {
+          const node = new SpecificationNode();
+          node.setAsset(asset);
+          node.setMetadata(metadata);
+          addNewNode(node);
+          hideModal();
+        }}
       }); 
       showModal();
     }

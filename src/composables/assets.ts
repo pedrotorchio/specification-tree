@@ -36,6 +36,7 @@ export function newAssetForm() {
   };
   return {
     assetDataProxy,
-    asset: asset.value
+    asset: asset.value,
+    metadata: metadata.value
   }
 }

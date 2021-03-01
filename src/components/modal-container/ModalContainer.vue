@@ -13,12 +13,12 @@ export default defineComponent({
   setup(props, { emit }) {
     const {
       isShown,
-      closeModal,
+      hideModal,
       modalComponent,
       modalParameters
       } = useModal();
     return {
-      closeModal,
+      hideModal,
       isShown,
       modalComponent,
       modalParameters,

@@ -1,6 +1,6 @@
 import { Store } from "@/models/Store";
 import { JsonObject } from "type-fest";
-import { computed, reactive, ref, shallowRef } from "vue";
+import { computed, markRaw, reactive, ref, shallowRef } from "vue";
 
 type PropsDictionary = { [k: string]: any };
 type ListenersDictionary = { [k: string]: Function };
@@ -27,7 +27,7 @@ class ModalView extends Store<ModalState> {
     const { listeners = {}, props = {} } = options;
     this.state.parameters.listeners = listeners;
     this.state.parameters.props = props;
-    this.state.component = component;
+    this.state.component = markRaw(component);
   }
   showModal() {
     this.state.shown = true;
@@ -47,7 +47,7 @@ export function useModal() {
     modalParameters: computed(() => store.getState().parameters),
     isShown: computed(() => store.getState().shown),
     setModalComponent: (component: any, options: ComponentOptions) => store.setModalComponent(component, options),
-    closeModal: () => store.hideModal(),
+    hideModal: () => store.hideModal(),
     showModal: () => store.showModal()
   }
 }

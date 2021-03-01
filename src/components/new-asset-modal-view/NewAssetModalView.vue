@@ -22,8 +22,8 @@ export default defineComponent({
     TextInput
   },
   setup(props, { emit }) {
-    const { assetDataProxy, asset } = newAssetForm();
-    const submit = () => emit("create:asset", asset);
+    const { assetDataProxy, asset, metadata } = newAssetForm();
+    const submit = () => emit("create:asset", { asset, metadata });
     return {
       assetData: assetDataProxy,
       SpecificationNodeTypes,

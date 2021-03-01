@@ -8,14 +8,14 @@ const selectedNode: Ref<ISpecificationNode> = ref(specificationTree.value);
 export default function useSpecificationTreeComposition() {
   const hasParent = () => Boolean(selectedNode.value.getParentNode());
 
-  const addNewAsset = (newAsset: ISpecificationNode) => selectedNode.value.addChild(newAsset);
+  const addNewNode = (newAsset: ISpecificationNode) => selectedNode.value.addChild(newAsset);
   const chooseNewParent = (parentAsset: ISpecificationNode) => selectedNode.value = parentAsset;
   const isSibling = (potentialSibling: ISpecificationNode) => testNodeIsSibling(selectedNode.value, potentialSibling);
   const isDirectChild = (potentialChild: ISpecificationNode) => selectedNode.value.getChildren().some(child => child.equals(potentialChild));
   const isAncestorOrUncle = (potentialAncestorUncle: ISpecificationNode) => hasParent() && testNodeAncestryAndUncles(selectedNode.value.getParentNode()!, potentialAncestorUncle);
   return {
     specificationTree,
-    addNewAsset,
+    addNewNode,
     chooseNewParent,
     isDirectChild,
     isSibling,

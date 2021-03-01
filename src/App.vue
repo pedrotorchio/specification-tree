@@ -11,7 +11,7 @@ import DirectoryView from '@/components/directory-view/DirectoryView.vue';
 import ModalContainer from '@/components/modal-container/ModalContainer.vue';
 import NewAssetModalContainer from '@/components/new-asset-modal-view/NewAssetModalView.vue';
 import NewAssetButton from '@/components/new-asset/NewAssetButton.vue';
-import { setModalComponent, showModal } from '@/composables/globalModalView';
+import { useModal } from '@/composables/globalModalView';
 import specificationTreeComposition from '@/composables/specificationTree';
 import { defineComponent, ref } from 'vue';
 import Asset from './models/Asset';
@@ -35,8 +35,11 @@ export default defineComponent({
       newAsset.setContent(`Random: ${Math.floor(Math.random()*999)}`);
       return newAsset;
     }
+    const { setModalComponent, showModal } = useModal();
     const showNewAssetModal = () => {
-      setModalComponent(NewAssetModalContainer); 
+      setModalComponent(NewAssetModalContainer, {
+        listeners: { "create:asset": (e: any) => alert(e) }
+      }); 
       showModal();
     }
     // addNewAsset(new SpecificationNode("A test", mkRandomAsset())),

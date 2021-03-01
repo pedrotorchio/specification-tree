@@ -1,35 +1,53 @@
+import { Store } from "@/models/Store";
 import { JsonObject } from "type-fest";
-import { computed, ref, shallowRef } from "vue";
+import { computed, reactive, ref, shallowRef } from "vue";
 
-const _modalComponent = shallowRef<any>(null);
-const _modalParameters = ref<any>(null);
-const _shown = ref(false);
+type PropsDictionary = { [k: string]: any };
+type ListenersDictionary = { [k: string]: Function };
+interface ModalState {
+  shown: boolean,
+  component: any,
+  parameters: {
+    listeners: ListenersDictionary,
+    props: PropsDictionary
+  }
+}
+class ModalView extends Store<ModalState> {
+  protected data() {
+    return {
+      shown: false,
+      component: null,
+      parameters: {
+        listeners: {},
+        props: {}
+      }
+    }
+  }
+  setModalComponent(component: any, options: ComponentOptions = {}) {
+    const { listeners = {}, props = {} } = options;
+    this.state.parameters.listeners = listeners;
+    this.state.parameters.props = props;
+    this.state.component = component;
+  }
+  showModal() {
+    this.state.shown = true;
+  }
+  hideModal() {
+    this.state.shown = false;
+  }
+}
+const store = new ModalView();
 
-export function getModalComponent() {
-  return _modalComponent.value;
-}
-export function getModalParameters() {
-  return _modalParameters.value;
-}
-type ComponentOptions = { bind?: any }
-export function setModalComponent(component: any, options?: ComponentOptions) {
-  _modalParameters.value = options?.bind ?? {};
-  _modalComponent.value = component;
-}
-export function showModal() {
-  _shown.value = true;
-}
-export function hideModal() {
-  _shown.value = false;
-}
+type ComponentOptions = { listeners?: any, props?: any };
+
 export function useModal() {
   
   return {
-    getModalComponent,
-    setModalComponent,
-    getModalParameters,
-    isShown: computed(() => _shown.value),
-    close: () => hideModal(),
-    show: () => showModal()
+    modalComponent: computed(() => store.getState().component),
+    modalParameters: computed(() => store.getState().parameters),
+    isShown: computed(() => store.getState().shown),
+    setModalComponent: (component: any, options: ComponentOptions) => store.setModalComponent(component, options),
+    closeModal: () => store.hideModal(),
+    showModal: () => store.showModal()
   }
 }

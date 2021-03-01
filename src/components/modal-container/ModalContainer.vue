@@ -1,27 +1,27 @@
 <template lang="pug">
 .modal-container-background( v-if="isShown" @click.self="close()" )
   .modal-container 
-    .modal-close-button( @click="close()" ) X
-    component.modal-view-component( :is="getModalComponent()" v-bind="getModalParameters()" )
+    .modal-close-button( @click="closeModal()" ) X
+    component.modal-view-component( :is="modalComponent" v-bind="modalParameters.props" v-on="modalParameters.listeners" )
 </template>
 <script lang="ts">
 import { defineComponent } from 'vue'
 import { useModal } from '@/composables/globalModalView';
+import Asset from '@/models/Asset';
 
 export default defineComponent({
   setup(props, { emit }) {
     const {
-      getModalComponent,
       isShown,
-      getModalParameters,
-      close
+      closeModal,
+      modalComponent,
+      modalParameters
       } = useModal();
-
     return {
-      close,
+      closeModal,
       isShown,
-      getModalComponent,
-      getModalParameters
+      modalComponent,
+      modalParameters,
     }
   }
 });

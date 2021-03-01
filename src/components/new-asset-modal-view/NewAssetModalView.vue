@@ -1,5 +1,5 @@
 <template lang="pug">
-form( @submit.prevent="" )
+form( @submit.prevent="submit()" )
   label Title
   input( v-model="assetData.title" )
   label Type
